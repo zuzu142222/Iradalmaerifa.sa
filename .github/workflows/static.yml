@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض الخدمات الإعلامية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, transparent 100%);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(59,130,246,0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styling */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .section-header .line {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            border-radius: 2px;
+            margin: 15px auto;
+        }
+
+        .section-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        /* Package Card */
+        .package-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+
+        .package-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--card-color);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 40px var(--card-glow);
+        }
+
+        .package-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .card-price {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--card-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .card-price .currency {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #94a3b8;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--card-color);
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .card-note {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border-right: 3px solid var(--card-color);
+        }
+
+        .card-extra {
+            margin-top: 15px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .extra-tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Popular Badge */
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #F59E0B, #EF4444);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { box-shadow: 0 0 5px rgba(245,158,11,0.5); }
+            50% { box-shadow: 0 0 20px rgba(245,158,11,0.8); }
+            100% { box-shadow: 0 0 5px rgba(245,158,11,0.5); }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            color: #fff;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(59,130,246,0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(59,130,246,0.6);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .section-header h2 { font-size: 1.6rem; }
+            .cards-grid { grid-template-columns: 1fr; padding: 0 10px; }
+            .package-card { padding: 25px; }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">✨ عرض حصري ومتميز</div>
+        <h1>حلولنا الإعلامية المتكاملة</h1>
+        <p>نقدم لك باقات متنوعة تلبي جميع احتياجاتك في التواصل الرقمي والهوية الإعلامية وتطوير المواقع</p>
+    </section>
+
+    <!-- Social Media Section -->
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>📱 إدارة وسائل التواصل الاجتماعي</h2>
+            <div class="line"></div>
+            <p>باقات مصممة لتعزيز حضورك الرقمي وبناء جمهورك</p>
+        </div>
+        <div class="cards-grid">
+            <!-- Basic -->
+            <div class="package-card" style="--card-color: #3B82F6; --card-glow: rgba(59,130,246,0.2);">
+                <span class="card-icon">📱</span>
+                <h3 class="card-title">الباقة الأساسية</h3>
+                <div class="card-price">١,٠٠٠ <span class="currency">ريال / شهرياً</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> إدارة حساب واحد في وسائل التواصل الاجتماعي</li>
+                    <li><span class="check-icon">✓</span> ١٢ منشوراً شهرياً</li>
+                    <li><span class="check-icon">✓</span> ٨ تصاميم ثابتة</li>
+                    <li><span class="check-icon">✓</span> تغطية فعالية واحدة شهرياً</li>
+                    <li><span class="check-icon">✓</span> تقرير أداء شهري</li>
+                </ul>
+            </div>
+
+            <!-- Advanced -->
+            <div class="package-card" style="--card-color: #8B5CF6; --card-glow: rgba(139,92,246,0.2);">
+                <span class="card-icon">🚀</span>
+                <h3 class="card-title">الباقة المتقدمة</h3>
+                <div class="card-price">٢,٥٠٠ <span class="currency">ريال / شهرياً</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> إدارة حسابين في وسائل التواصل الاجتماعي</li>
+                    <li><span class="check-icon">✓</span> ٢٠ منشوراً شهرياً</li>
+                    <li><span class="check-icon">✓</span> ١٢ تصميماً ثابتاً</li>
+                    <li><span class="check-icon">✓</span> ٤ مقاطع فيديو قصيرة (ريلز)</li>
+                    <li><span class="check-icon">✓</span> تغطية فعاليتين شهرياً</li>
+                    <li><span class="check-icon">✓</span> إدارة الرسائل والتعليقات</li>
+                    <li><span class="check-icon">✓</span> تقرير أداء شهري مع التوصيات</li>
+                </ul>
+            </div>
+
+            <!-- Professional -->
+            <div class="package-card" style="--card-color: #F59E0B; --card-glow: rgba(245,158,11,0.2);">
+                <span class="popular-badge">الأكثر طلباً ⭐</span>
+                <span class="card-icon">👑</span>
+                <h3 class="card-title">الباقة الاحترافية</h3>
+                <div class="card-price">٤,٥٠٠ <span class="currency">ريال / شهرياً</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> إدارة جميع حسابات الجهة</li>
+                    <li><span class="check-icon">✓</span> ٣٠ منشوراً شهرياً</li>
+                    <li><span class="check-icon">✓</span> ٢٠ تصميماً احترافياً</li>
+                    <li><span class="check-icon">✓</span> ٨ مقاطع فيديو قصيرة</li>
+                    <li><span class="check-icon">✓</span> تغطية الفعاليات والبرامج</li>
+                    <li><span class="check-icon">✓</span> إعداد خطة محتوى شهرية</li>
+                    <li><span class="check-icon">✓</span> إدارة الحملات الإعلانية <span style="color:#94a3b8;font-size:0.8rem">(لا تشمل ميزانية الإعلان)</span></li>
+                    <li><span class="check-icon">✓</span> تقرير أداء وتحليل شهري مفصل</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialized Packages -->
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>🎯 باقات متخصصة</h2>
+            <div class="line"></div>
+            <p>خدمات مخصصة لتلبية احتياجاتك الخاصة</p>
+        </div>
+        <div class="cards-grid">
+            <!-- Events Coverage -->
+            <div class="package-card" style="--card-color: #EF4444; --card-glow: rgba(239,68,68,0.2);">
+                <span class="card-icon">📸</span>
+                <h3 class="card-title">باقة تغطية الفعاليات</h3>
+                <div class="card-price" style="font-size:1.4rem;">حملة مجانية</div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> تصوير وتوثيق الفعالية</li>
+                    <li><span class="check-icon">✓</span> تصميم إعلان قبل الفعالية</li>
+                    <li><span class="check-icon">✓</span> تغطية مباشرة أثناء التنفيذ</li>
+                    <li><span class="check-icon">✓</span> إنتاج ألبوم صور</li>
+                    <li><span class="check-icon">✓</span> فيديو ختامي للفعالية</li>
+                    <li><span class="check-icon">✓</span> تقرير إعلامي للنشر</li>
+                </ul>
+                <div class="card-note">⚠️ لا تشمل ميزانية الإعلان</div>
+            </div>
+
+            <!-- Media Identity -->
+            <div class="package-card" style="--card-color: #10B981; --card-glow: rgba(16,185,129,0.2);">
+                <span class="card-icon">🎨</span>
+                <h3 class="card-title">باقة الهوية الإعلامية</h3>
+                <div class="card-price" style="font-size:1.4rem;">تواصل معنا</div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> تصميم قالب منشورات موحد</li>
+                    <li><span class="check-icon">✓</span> تصميم قالب قصص</li>
+                    <li><span class="check-icon">✓</span> تصميم ترويسة وخلفيات</li>
+                    <li><span class="check-icon">✓</span> دليل استخدام الهوية الإعلامية</li>
+                    <li><span class="check-icon">✓</span> إعداد الملف التعريفي للجهة</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Websites Section -->
+    <section class="section fade-in">
+        <div class="section-header">
+            <h2>🌐 تطوير المواقع الإلكترونية</h2>
+            <div class="line"></div>
+            <p>حلول تقنية متكاملة لبناء حضورك الرقمي</p>
+        </div>
+        <div class="cards-grid">
+            <!-- Basic Website -->
+            <div class="package-card" style="--card-color: #06B6D4; --card-glow: rgba(6,182,212,0.2);">
+                <span class="card-icon">🌐</span>
+                <h3 class="card-title">باقة المواقع الأساسية</h3>
+                <div class="card-price">٢,٥٠٠ <span class="currency">ريال</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> تصميم موقع تعريفي احترافي</li>
+                    <li><span class="check-icon">✓</span> حتى ٥ صفحات (الرئيسية – من نحن – الخدمات – الأخبار – تواصل معنا)</li>
+                    <li><span class="check-icon">✓</span> تصميم متوافق مع الجوال والأجهزة الذكية</li>
+                    <li><span class="check-icon">✓</span> ربط وسائل التواصل الاجتماعي</li>
+                    <li><span class="check-icon">✓</span> نموذج تواصل</li>
+                    <li><span class="check-icon">✓</span> تدريب مختصر على إدارة المحتوى</li>
+                </ul>
+            </div>
+
+            <!-- Advanced Website -->
+            <div class="package-card" style="--card-color: #6366F1; --card-glow: rgba(99,102,241,0.2);">
+                <span class="card-icon">💻</span>
+                <h3 class="card-title">باقة الموقع المتقدمة</h3>
+                <div class="card-price">٤,٥٠٠ <span class="currency">ريال</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> تصميم موقع احترافي مخصص</li>
+                    <li><span class="check-icon">✓</span> حتى ١٠ صفحات</li>
+                    <li><span class="check-icon">✓</span> لوحة تحكم لإدارة المحتوى</li>
+                    <li><span class="check-icon">✓</span> قسم أخبار ومقالات</li>
+                    <li><span class="check-icon">✓</span> تحسين محركات البحث (SEO) الأساسي</li>
+                    <li><span class="check-icon">✓</span> ربط Google Analytics وGoogle Search Console</li>
+                    <li><span class="check-icon">✓</span> نموذج تسجيل للبرامج والفعاليات</li>
+                    <li><span class="check-icon">✓</span> دعم فني لمدة شهر</li>
+                </ul>
+            </div>
+
+            <!-- Professional Website -->
+            <div class="package-card" style="--card-color: #EC4899; --card-glow: rgba(236,72,153,0.2);">
+                <span class="popular-badge">الأشمل 🏆</span>
+                <span class="card-icon">🏆</span>
+                <h3 class="card-title">باقة الموقع الاحترافية</h3>
+                <div class="card-price">٦,٧٠٠ <span class="currency">ريال</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> تصميم وتطوير موقع متكامل</li>
+                    <li><span class="check-icon">✓</span> صفحات غير محدودة</li>
+                    <li><span class="check-icon">✓</span> بوابة عضويات أو متطوعين</li>
+                    <li><span class="check-icon">✓</span> نظام تسجيل للفعاليات والدورات</li>
+                    <li><span class="check-icon">✓</span> أرشفة الأخبار والتقارير</li>
+                    <li><span class="check-icon">✓</span> تحسين متقدم لمحركات البحث</li>
+                    <li><span class="check-icon">✓</span> ربط النشرات البريدية</li>
+                    <li><span class="check-icon">✓</span> لوحة مؤشرات وتقارير</li>
+                    <li><span class="check-icon">✓</span> دعم فني وصيانة لمدة ٣ أشهر</li>
+                </ul>
+            </div>
+
+            <!-- Website Optimization -->
+            <div class="package-card" style="--card-color: #14B8A6; --card-glow: rgba(20,184,166,0.2);">
+                <span class="card-icon">⚡</span>
+                <h3 class="card-title">باقة تطوير وتحسين الموقع</h3>
+                <div class="card-price">يبدأ من ١,٥٠٠ <span class="currency">ريال</span></div>
+                <ul class="features-list">
+                    <li><span class="check-icon">✓</span> مراجعة الموقع الحالي وتحليل تجربة المستخدم</li>
+                    <li><span class="check-icon">✓</span> تحديث التصميم وتحسين المظهر العام</li>
+                    <li><span class="check-icon">✓</span> تحسين سرعة الموقع والأداء</li>
+                    <li><span class="check-icon">✓</span> تحديث المحتوى والنصوص والصور</li>
+                    <li><span class="check-icon">✓</span> إضافة صفحات أو أقسام جديدة (حتى ٥ صفحات)</li>
+                    <li><span class="check-icon">✓</span> تحسين توافق الموقع مع الجوال والأجهزة اللوحية</li>
+                    <li><span class="check-icon">✓</span> تحسين أساسيات محركات البحث (SEO)</li>
+                    <li><span class="check-icon">✓</span> ربط الموقع بوسائل التواصل الاجتماعي</li>
+                    <li><span class="check-icon">✓</span> إصلاح الأخطاء التقنية والمشكلات التشغيلية</li>
+                    <li><span class="check-icon">✓</span> تقرير يتضمن التعديلات المنفذة والتوصيات المستقبلية</li>
+                </ul>
+                <div class="card-extra">
+                    <span class="extra-tag">⏱️ مدة التنفيذ: ٧-١٤ يوم عمل</span>
+                    <span class="extra-tag">🔧 دعم فني: أسبوعان بعد التسليم</span>
+                </div>
+                <div class="card-note">💡 السعر يحدد حسب حجم التعديلات المطلوبة</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section fade-in">
+        <h2 style="font-size:2rem; margin-bottom:15px;">🚀 ابدأ رحلتك الرقمية الآن</h2>
+        <p style="color:#94a3b8; margin-bottom:30px; font-size:1.1rem;">تواصل معنا لاختيار الباقة المناسبة لك</p>
+        <button class="cta-button" onclick="alert('تواصل معنا عبر القنوات الرسمية')">اطلب عرضك المخصص</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>✨ جميع الباقات قابلة للتخصيص حسب احتياجاتك | الأسعار تشمل الضريبة</p>
+    </footer>
+
+    <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Scroll animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
